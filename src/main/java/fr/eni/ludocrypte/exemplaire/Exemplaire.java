@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 public class Exemplaire {
 
+
     @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,10 +1,10 @@
 package fr.eni.ludocrypte.jeux;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import fr.eni.ludocrypte.genres.Genre;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -21,6 +21,15 @@ public class Jeu {
     private int dureeMoyenne;
     private Float tarifJour;
     private int idGenre;
+
+    @ManyToMany(cascade = CascadeType.MERGE
+     )
+            @JoinTable(
+                    name = "jeu_genre",
+                    joinColumns = @JoinColumn(name= "jeu_id"),
+                    inverseJoinColumns = @JoinColumn(name = "genre_id")
+            )
+    List<Genre> genres;
 
 //    public Long getId() {
 //        return id;

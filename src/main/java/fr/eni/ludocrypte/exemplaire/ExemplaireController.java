@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -17,7 +15,7 @@ public class ExemplaireController {
     private ExemplaireService exemplaireService;
 
     @PostMapping("/exemplaires")
-    public ResponseEntity<ResponseService<Exemplaire>> getExemplaire(@Valid @RequestBody Exemplaire exemplaire, BindingResult bindingResult) {
+    public ResponseEntity<ResponseService<Exemplaire>> addExemplaire(@Valid @RequestBody Exemplaire exemplaire, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder errors = new StringBuilder("Erreurs de validation");
 
@@ -26,6 +24,20 @@ public class ExemplaireController {
 
 
         }
-        return ResponseService.buildResponse("201", "voici votre exemplaire", exemplaireService.getExemplaireById(exemplaire.getId()));
+
+        return ResponseEntity.ok(exemplaireService.addExemplaire(exemplaire));
+    }
+
+    @GetMapping("/exemplaires/{noCodeBarre}")
+    public ResponseEntity<ResponseService<Exemplaire>> getExemplaireByNoCodeBarre(@PathVariable("noCodeBarre") String noCodeBarre) {
+        Exemplaire retrieveExemplaire = exemplaireService.findByNoCodeBarre(noCodeBarre).getData();
+
+
+        if (retrieveExemplaire == null ) {
+
+            return ResponseEntity.badRequest().body(exemplaireService.findByNoCodeBarre(noCodeBarre));
+
+        }
+        return ResponseEntity.ok(exemplaireService.findByNoCodeBarre(noCodeBarre));
     }
 }
